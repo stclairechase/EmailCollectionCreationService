@@ -84,7 +84,7 @@ def div_tag_processor(article_soup: BeautifulSoup) -> str:
     return author_name
 
 
-def procees_tag_scrape(article_soup: BeautifulSoup) -> str:
+def process_tag_scrape(article_soup: BeautifulSoup) -> str:
 
     author_name = None 
 
