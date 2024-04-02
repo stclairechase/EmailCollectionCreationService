@@ -1,0 +1,26 @@
+{
+    "GPT":{
+        "MODEL": "GPT-4",
+        "LIMITS": {
+            "ARTICLE_DATA_WORD_COUNT" : 4000
+        },
+        "ROLES":{
+            "MARKETING": "You are genius pitch writer who channels your knowledge, experience and creativity. You always pick an unusual and interesting idea rather than something obvious.",
+            "COLLABORATION": "You are a chief colloboration officer that is looking for collabs with my company with others."
+        }
+    },
+    "DATA_PROCESSING":{
+        "IMPORTS_URL_COLUMN": "URL"
+    },
+    "USER_DETAILS":{
+        "COMPANY_NAME": "8 Billion Trees"
+    }, 
+    "EMAIL_GENERATION_DETAILS":{
+        "SIGN OFF NAME": "John Smith",
+        "AUTHORITY_FACTS":{
+            "1": "We're doomed by 2035 due to wind power not being used enough according to Forbes",
+            "2": "12% of teenagers won't see their 120th birthday unless we change according to the WHO"
+        }
+    }
+
+}

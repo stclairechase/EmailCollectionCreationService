@@ -1,4 +1,4 @@
-from ...general.util import website_request
+from .general.util import website_request
 
 from bs4 import BeautifulSoup
 from bs4.element import Tag
