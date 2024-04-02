@@ -3,10 +3,8 @@ from threading import Thread
 from pandas import read_csv
 import pandas as pd
 
-def url_creator(domain: str, endpoints: list) -> list: 
 
-    endpoints = ['sitemap_index.xml', 'site-map-index.xml',
-                 'site-map.xml', 'sitemap', 'site-map']
+def url_creator(domain: str, endpoints: list) -> list: 
     
     end_of_domain = domain[-1]
     if '/' != end_of_domain:
@@ -19,6 +17,19 @@ def url_creator(domain: str, endpoints: list) -> list:
     
     return url_options
 
+def search_site_map_url(site_map_urls: list):
+
+    created_urls = []
+
+    endpoints = ['author', 'writer', 'team', 'contact']
+    for endpoint in endpoints:
+        temp_urls = [f'{x}/{endpoint}' for x in site_map_urls]
+        created_urls.extend(temp_urls)
+
+    raw, soup = check_for_valid_website(created_urls)
+    
+
+
 def site_map_processor(url: str): 
 
     base_url, url = seperate_url(url)
@@ -26,8 +37,8 @@ def site_map_processor(url: str):
     sitemap_endpoints = ['sitemap_index.xml', 'site-map-index.xml',
                         'site-map.xml', 'sitemap', 'site-map']
     site_map_urls = url_creator(base_url, sitemap_endpoints)
-
     raw, soup = check_for_valid_website(site_map_urls)
+
 
 
 df = read_csv('/Users/chasestclaire/Desktop/coding_projects/github/AutomatedEmailCreation/EmailCollectionCreationService/data/example_input_data/20.rowss.testing.20.feb.csv')
