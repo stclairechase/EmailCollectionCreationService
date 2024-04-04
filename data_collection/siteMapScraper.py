@@ -16,34 +16,45 @@ def url_creator(domain: str, endpoints: list) -> list:
         url_options.append(potential_url)
     
     return url_options
+    
+def site_map_locater(url: str): 
 
-def search_site_map_url(site_map_urls: list):
+    sitemap_endpoints = ['sitemap_index.xml', 'site-map-index.xml',
+                        'site-map.xml', 'sitemap', 'site-map']
+    site_map_urls = url_creator(url, sitemap_endpoints)
+    valid_url = check_for_valid_website(site_map_urls)
+
+    return valid_url
+
+def search_site_map_url(url: str):
 
     created_urls = []
 
     endpoints = ['author', 'writer', 'team', 'contact']
     for endpoint in endpoints:
-        temp_urls = [f'{x}/{endpoint}' for x in site_map_urls]
-        created_urls.extend(temp_urls)
+        temp_url = f'{url}/{endpoint}'
+        created_urls.append(temp_url)
 
-    raw, soup = check_for_valid_website(created_urls)
-    
+    valid_url = check_for_valid_website(created_urls)
+    return valid_url
 
-
-def site_map_processor(url: str): 
+def process_site_map_search(url: str):
 
     base_url, url = seperate_url(url)
 
-    sitemap_endpoints = ['sitemap_index.xml', 'site-map-index.xml',
-                        'site-map.xml', 'sitemap', 'site-map']
-    site_map_urls = url_creator(base_url, sitemap_endpoints)
-    raw, soup = check_for_valid_website(site_map_urls)
-
+    valid_site_map = site_map_locater(base_url)
+    if valid_site_map == None: 
+        return None
+    
+    valid_team_map = search_site_map_url(valid_site_map)
+    if valid_site_map == None: 
+        return None
+    
+    return 
 
 
 df = read_csv('/Users/chasestclaire/Desktop/coding_projects/github/AutomatedEmailCreation/EmailCollectionCreationService/data/example_input_data/20.rowss.testing.20.feb.csv')
-URL = df['URL'].tolist()
-urls = [x for x in URL if not pd.isna(x)]
+urls = df['URL'].tolist()
 
 for url in urls: 
-    site_map_processor(url)
+    process_site_map_search(url)
