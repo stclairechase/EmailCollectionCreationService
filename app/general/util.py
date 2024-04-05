@@ -5,16 +5,11 @@ from re import findall
 from pathlib import Path
 from json import load
 from pandas import read_csv, DataFrame
-import lxml
 
-def website_request(url: str, valid_url=None) -> tuple[str, BeautifulSoup]: 
+def website_request(url: str, valid_url=None) -> tuple[str, BeautifulSoup]:
+
     if url == None or type(url) != str: 
         return None, None
-    
-    if 'xml' in url: 
-        parser = 'lxml'
-    else:
-        parser = 'html.parser'
 
     session_ = session()
     headers = {
@@ -32,7 +27,10 @@ def website_request(url: str, valid_url=None) -> tuple[str, BeautifulSoup]:
         return None, None
 
     raw_data: str = raw.text
-    soup = BeautifulSoup(raw_data, parser)
+    if 'xml' in url: 
+        soup = BeautifulSoup(raw_data, features='xml')
+    else:
+        soup = BeautifulSoup(raw_data, features='html.parser')
     
     session_.close()
     return raw_data, soup
@@ -42,7 +40,6 @@ def validate_url(trial_url: str, valid_url: list):
     raw, soup = website_request(trial_url)
     if valid_url == [] and raw != None:
         valid_url.append(trial_url)
-
 
 def check_for_valid_website(url_list: list[str]) -> tuple[str, BeautifulSoup]:
 
@@ -75,7 +72,6 @@ def seperate_url(url: str):
     base_url = (extension_split + extension).replace(front_part_of_url, '')
 
     return base_url, url
-
 
 def directory_path_finder() -> str: 
 

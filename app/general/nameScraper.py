@@ -17,6 +17,8 @@ def regex_name_filter(text: str) -> str:
 
 def spacey_search(html_text: str) -> list:
 
+    MAX_LIMIT = 1000000
+
     found_names = []
     if html_text == None: 
         return found_names
@@ -28,6 +30,10 @@ def spacey_search(html_text: str) -> list:
     else: 
         text_data = ', '.join([" ".join(x) for x in initial_name_search])
 
+    length_of_text = len(text_data)
+    if MAX_LIMIT < length_of_text: 
+        text_data = text_data [0:MAX_LIMIT]
+        
     parsed_string = language_model(text_data)
 
     for data in parsed_string.ents: 

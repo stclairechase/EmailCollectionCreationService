@@ -100,4 +100,5 @@ def process_tag_scrape(article_soup: BeautifulSoup) -> str:
         author_name = processor(article_soup)
         if author_name != None: 
             break
+        
     return author_name

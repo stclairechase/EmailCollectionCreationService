@@ -32,8 +32,10 @@ def process_author_name_script(url: str, name_data: list) -> None:
     base_url, url = seperate_url(url)
         
     name_data_addition = {
+        'base_url': base_url, 
+        'full_url': url,
         'author_name': None,
-        'unknown_accuracy': False,
+        'unknown_accuracy': False
     }
 
     raw_text, soup = website_request(url)
@@ -45,7 +47,7 @@ def process_author_name_script(url: str, name_data: list) -> None:
         return name_data
     
     site_map_check: list = process_site_map_search(base_url)
-    if site_map_check != None or site_map_check != []:
+    if site_map_check != None and site_map_check != []:
         temp_data = []
         for name in site_map_check: 
             inner_data = name_data_addition.copy()
@@ -54,11 +56,11 @@ def process_author_name_script(url: str, name_data: list) -> None:
         with thread_lock:
             name_data.extend(temp_data)
         return name_data
-    
+        
     article_check: list = spacey_search(raw_text)
     if article_check != []:
         temp_data = []
-        for name in site_map_check: 
+        for name in article_check: 
             inner_data = name_data_addition.copy()
             inner_data['author_name'] = name
             inner_data['unknown_accuracy'] = True
@@ -66,6 +68,15 @@ def process_author_name_script(url: str, name_data: list) -> None:
         with thread_lock:
             name_data.extend(temp_data)
         return name_data
+    
+def test():
+
+    name_data = []
+    urls = setup_data()
+    for url in urls: 
+        process_author_name_script(url, name_data)
+
+    return name_data
 
 def main():
 
@@ -73,6 +84,7 @@ def main():
 
     name_data = []
     threads = []
+    urls = urls[0:500]
     for url in urls: 
         thread = Thread(target=process_author_name_script, args=(url, name_data,))
         thread.start()
