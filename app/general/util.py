@@ -5,13 +5,14 @@ from re import findall
 from pathlib import Path
 from json import load
 from pandas import read_csv, DataFrame
+import lxml
 
 def website_request(url: str, valid_url=None) -> tuple[str, BeautifulSoup]: 
     if url == None or type(url) != str: 
         return None, None
     
     if 'xml' in url: 
-        parser = 'xml.parser'
+        parser = 'lxml'
     else:
         parser = 'html.parser'
 

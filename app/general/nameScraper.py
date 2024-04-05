@@ -2,7 +2,7 @@ from spacy import load
 import re
 from pandas import read_csv
 
-from util import website_request
+from .util import website_request
 
 def regex_name_filter(text: str) -> str:
     possible_names = []
@@ -15,7 +15,7 @@ def regex_name_filter(text: str) -> str:
         return None
     return possible_names
 
-def spacey_search(html_text: str):
+def spacey_search(html_text: str) -> list:
 
     found_names = []
     if html_text == None: 

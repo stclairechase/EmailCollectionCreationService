@@ -1,4 +1,7 @@
-from general.util import website_request, check_for_valid_website, seperate_url
+from app.general.util import website_request, check_for_valid_website, seperate_url
+from app.general.nameScraper import spacey_search
+from app.processing.filterNames import filter_out_names
+
 from threading import Thread
 from pandas import read_csv
 import pandas as pd
@@ -17,7 +20,7 @@ def url_creator(domain: str, endpoints: list) -> list:
     
     return url_options
     
-def site_map_locater(url: str): 
+def site_map_locater(url: str) -> str: 
 
     sitemap_endpoints = ['sitemap_index.xml', 'site-map-index.xml',
                         'site-map.xml', 'sitemap', 'site-map']
@@ -26,7 +29,7 @@ def site_map_locater(url: str):
 
     return valid_url
 
-def search_site_map_url(url: str):
+def search_site_map_url(url: str) -> str:
 
     created_urls = []
 
@@ -38,16 +41,20 @@ def search_site_map_url(url: str):
     valid_url = check_for_valid_website(created_urls)
     return valid_url
 
-def process_site_map_search(url: str):
-
-    base_url, url = seperate_url(url)
+def process_site_map_search(base_url: str):
 
     valid_site_map = site_map_locater(base_url)
-    if valid_site_map == None: 
+    if valid_site_map != None: 
         return None
     
-    valid_team_map = search_site_map_url(valid_site_map)
-    if valid_site_map == None: 
+    valid_team_map: str = search_site_map_url(valid_site_map)
+    if valid_team_map == None: 
         return None
     
-    return 
+    raw_text, soup = website_request(valid_team_map)
+    possible_names = spacey_search(raw_text)
+    valid_names = filter_out_names(possible_names)
+    
+    if valid_names == []:
+        return None
+    return valid_names

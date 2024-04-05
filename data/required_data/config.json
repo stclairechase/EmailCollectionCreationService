@@ -1,12 +1,13 @@
 {
     "GPT":{
-        "MODEL": "GPT-4",
+        "MODEL": "gpt-4",
         "LIMITS": {
             "ARTICLE_DATA_WORD_COUNT" : 4000
         },
         "ROLES":{
             "MARKETING": "You are genius pitch writer who channels your knowledge, experience and creativity. You always pick an unusual and interesting idea rather than something obvious.",
-            "COLLABORATION": "You are a chief colloboration officer that is looking for collabs with my company with others."
+            "COLLABORATION": "You are a chief colloboration officer that is looking for collabs with my company with others.",
+            "EMAIL_SUBJECT_ROLE": "You are an amazing summarizer who can create an eye catching title to anything"
         }
     },
     "DATA_PROCESSING":{

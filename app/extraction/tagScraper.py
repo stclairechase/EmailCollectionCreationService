@@ -83,10 +83,12 @@ def div_tag_processor(article_soup: BeautifulSoup) -> str:
             break
     return author_name
 
-
 def process_tag_scrape(article_soup: BeautifulSoup) -> str:
 
     author_name = None 
+
+    if article_soup == None:
+        return author_name
 
     processors = [
         meta_tag_processor, 
