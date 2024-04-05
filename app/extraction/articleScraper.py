@@ -45,24 +45,26 @@ def article_pull(url: str) -> tuple(str, str, list, list):
 
 def make_freq_table(text_string) -> dict:
 
-    stopWords = set(stopwords.words("english"))
+    stop_words = set(stopwords.words("english"))
     words = word_tokenize(text_string)
     ps = PorterStemmer()
 
-    freqTable = dict()
+    frequency_table = dict()
     for word in words:
         word = ps.stem(word)
-        if word in stopWords:
+
+        if word in stop_words:
             continue
-        if word in freqTable:
-            freqTable[word] += 1
+
+        if word in frequency_table:
+            frequency_table[word] += 1
         else:
-            freqTable[word] = 1
+            frequency_table[word] = 1
 
-    return freqTable
+    return frequency_table
 
 
-def article_summarizer(article_text: str):
+def article_summarizer(article_text: str) -> str:
 
     tokenized = sent_tokenize(article_text)
     frequency_dict = make_freq_table(article_text)

@@ -1,11 +1,12 @@
 from pandas import read_csv
 from difflib import get_close_matches
 
+from ..general.util import data_request
+
 def first_name_examples() -> list: 
 
-    file_path = '/Users/chasestclaire/Desktop/coding_projects/github/AutomatedEmailCreation/EmailCollectionCreationService/data/required_data/us_birth_data_2011-2014.csv'
-
-    baby_names_df = read_csv(file_path)
+    file_path = 'data/required_data/us_birth_data_2011-2014.csv'
+    baby_names_df = data_request(file_path)
     first_names = sorted(list(set(baby_names_df["Child's First Name"].tolist())))
     return first_names
 

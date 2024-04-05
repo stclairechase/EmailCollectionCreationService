@@ -51,10 +51,3 @@ def process_site_map_search(url: str):
         return None
     
     return 
-
-
-df = read_csv('/Users/chasestclaire/Desktop/coding_projects/github/AutomatedEmailCreation/EmailCollectionCreationService/data/example_input_data/20.rowss.testing.20.feb.csv')
-urls = df['URL'].tolist()
-
-for url in urls: 
-    process_site_map_search(url)
