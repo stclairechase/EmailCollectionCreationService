@@ -1,9 +1,13 @@
 from pyhunter import PyHunter
 
+from general.util import data_request
 
 def hunterio_verifier(domain: str, first_name: str, last_name: str):
 
-    hunter = PyHunter('42ecc3395b3773c5203c59bd135174fa6078d6c7')
+    inner_file = 'data/required_data/api_keys.json'
+    KEY_DATA = data_request(inner_file)
+
+    hunter = PyHunter(KEY_DATA['HUNTER_IO'])
     email = None
     try:
         hunterio_data = hunter.email_finder(domain=domain, first_name=first_name, last_name=last_name)

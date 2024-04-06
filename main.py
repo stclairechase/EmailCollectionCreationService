@@ -5,6 +5,7 @@ from app.extraction.siteMapScraper import process_site_map_search
 from app.extraction.tagScraper import process_tag_scrape
 from app.general.util import data_request, website_request, seperate_url
 from app.general.nameScraper import spacey_search
+from app.data_management.authorNames import AuthorFinderDataManagement
 
 thread_lock = Lock()
 
@@ -81,17 +82,20 @@ def test():
 def main():
 
     urls = setup_data()
+    file_manager = AuthorFinderDataManagement(urls)
 
-    name_data = []
+    urls, name_data = file_manager.check_for_scraped_values()
+
     threads = []
-    urls = urls[0:500]
+    urls = urls[0:10]
     for url in urls: 
         thread = Thread(target=process_author_name_script, args=(url, name_data,))
         thread.start()
         threads.append(thread)
     for thread in threads:
         thread.join()
-    return 
+
+    file_manager.log_new_data(name_data)
 
 
 if __name__ == "__main__":
