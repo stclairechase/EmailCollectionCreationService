@@ -1,7 +1,7 @@
 from pandas import read_csv, DataFrame
 from os import path
 
-from general.util import directory_path_finder, seperate_url
+from app.general.util import directory_path_finder, seperate_url
 
 class AuthorFinderDataManagement: 
 
@@ -42,10 +42,10 @@ class AuthorFinderDataManagement:
 
     def log_new_data(self, name_data: list):
 
-        if path.exists(self.file_path):
-            MODE = 'w'
-        else: 
-            MODE = 'a'
-
         temp_dataframe = DataFrame(name_data)
-        temp_dataframe.to_csv(self.file_path, mode=MODE, index=False)
+        temp_dataframe = temp_dataframe.drop_duplicates()
+
+        if path.exists(self.file_path):
+            temp_dataframe.to_csv(self.file_path, mode='a', index=False, header=False)
+        else: 
+            temp_dataframe.to_csv(self.file_path, mode='w', index=False)

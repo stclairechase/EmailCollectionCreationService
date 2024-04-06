@@ -1,6 +1,6 @@
 from pyhunter import PyHunter
 
-from general.util import data_request
+from app.general.util import data_request
 
 def hunterio_verifier(domain: str, first_name: str, last_name: str):
 
@@ -17,8 +17,8 @@ def hunterio_verifier(domain: str, first_name: str, last_name: str):
         email_verifier = hunter.email_verifier(email)
 
         if email_verifier != {}:
-            results = email_verifier['result']
-            if results != 'deliverable':
+            results = email_verifier['status']
+            if results != 'valid':
                 email = None
         else:
             email = None
