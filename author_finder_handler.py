@@ -1,34 +1,32 @@
-from pandas import DataFrame, isna
+from pandas import DataFrame
 from threading import Thread, Lock
 from os.path import exists
 
-from app.extraction.siteMapScraper import process_site_map_search
+from .app.extraction.siteMapScraper import process_site_map_search
 from app.extraction.tagScraper import process_tag_scrape
-from app.general.util import data_request, website_request, seperate_url, directory_path_finder
+from app.general.util import website_request, seperate_url
+from app.data_management.general import directory_path_finder, setup_data, data_request
 from app.general.nameScraper import spacey_search
 from app.api_calls.hunterio_verifier import hunterio_verifier
-from app.data_management.authorNames import AuthorFinderDataManagement
+from app.data_management.file_manager import FileManager
 
 thread_lock = Lock()
 
-def setup_data() -> list:
 
-    inner_folder_path = 'data/input_data/'
-    file_name = 'rp_yes_2.csv'
-    imported_data: DataFrame = data_request(inner_folder_path + file_name)
+def last_file_check(name_data: list) -> list: 
 
-    json_file_path = 'data/required_data/config.json'
-    json_data = data_request(json_file_path)
+    inner_file_path = 'data/created_data/hunterio_verified.csv'
+    if not exists(inner_file_path):
+        return name_data
+    pulled_data: DataFrame = data_request(inner_file_path)
+    found_emails = pulled_data['base_url'].tolist()
 
-    url_column: str = json_data['DATA_PROCESSING']['IMPORTS_URL_COLUMN']
-    url_list = imported_data[url_column].tolist()
+    filtered_names = []
+    for data in name_data: 
+        if data['base_url'] not in found_emails: 
+            filtered_names.append(data)
 
-    filtered_list = []
-    for url in url_list:
-        if not isna(url):
-            filtered_list.append(url)
-
-    return filtered_list
+    return filtered_names
 
 def process_author_name_script(url: str, name_data: list) -> None: 
 
@@ -116,12 +114,17 @@ def test():
 
     return name_data
 
-def main():
+def main(file_name: str):
 
-    urls = setup_data()[0:15]
-    file_manager = AuthorFinderDataManagement(urls)
+    if file_name == None:
+        file_name = 'rp_yes_2.csv'
+
+    urls = setup_data(file_name)
+    inner_file = "data/created_data/raw_name_scrape.csv"
+    file_manager = FileManager(urls, inner_file)
 
     urls, name_data = file_manager.check_for_scraped_values()
+    name_data = last_file_check(name_data)
 
     if urls != []:
         threads = []
@@ -134,7 +137,6 @@ def main():
 
     file_manager.log_new_data(name_data)
     process_hunter_io(name_data)
-
 
 if __name__ == "__main__":
     main()

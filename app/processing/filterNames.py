@@ -1,7 +1,6 @@
-from pandas import read_csv
 from difflib import get_close_matches
 
-from ..general.util import data_request
+from app.data_management.general import data_request
 
 def first_name_examples() -> list: 
 

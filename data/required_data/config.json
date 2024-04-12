@@ -17,11 +17,11 @@
         "COMPANY_NAME": "8 Billion Trees"
     }, 
     "EMAIL_GENERATION_DETAILS":{
-        "SIGN OFF NAME": "John Smith",
-        "AUTHORITY_FACTS":{
-            "1": "We're doomed by 2035 due to wind power not being used enough according to Forbes",
-            "2": "12% of teenagers won't see their 120th birthday unless we change according to the WHO"
-        }
+        "SIGN_OFF_NAME": "John Smith",
+        "ADDITIONAL_IMPORTED_COLUMNS":[
+            "keywords",
+            "Description"
+        ]
     }
 
 }

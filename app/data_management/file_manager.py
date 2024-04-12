@@ -1,14 +1,14 @@
 from pandas import read_csv, DataFrame
 from os import path
 
-from app.general.util import directory_path_finder, seperate_url
+from app.general.util import seperate_url
+from app.data_management.general import directory_path_finder
 
-class AuthorFinderDataManagement: 
+class FileManager: 
 
-    def __init__(self, url_list=None) -> None:
+    def __init__(self, url_list: list, inner_file: str) -> None:
 
         directory_path = directory_path_finder()
-        inner_file = "data/created_data/raw_name_scrape.csv"
         self.file_path = directory_path + inner_file
         
         self.imported_url_list = url_list

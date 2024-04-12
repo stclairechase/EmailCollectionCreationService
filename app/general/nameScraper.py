@@ -1,8 +1,5 @@
 from spacy import load
 import re
-from pandas import read_csv
-
-from .util import website_request
 
 def regex_name_filter(text: str) -> str:
     possible_names = []

@@ -2,7 +2,7 @@ from openai._exceptions import RateLimitError
 import openai
 from time import sleep
 
-from ..general.util import data_request
+from app.data_management.general import data_request
 
 def gpt_call(model: str, api_key: str, parameters: list[dict]):
 
@@ -28,13 +28,9 @@ def gpt_call(model: str, api_key: str, parameters: list[dict]):
     response = response.choices[0].message.content
     return response
 
-def generate_request(query: str, article_limit: int, role_data: str) -> str:
+def generate_request(query: str, role_data: str) -> str:
 
     request_parameters = []
-
-    length_of_query = len(query)
-    if length_of_query > article_limit: 
-        query = query[0:article_limit]
 
     query_parameters = {
         "role": "user",
@@ -60,7 +56,6 @@ def process_chat_gpt(query: str, role_name: str):
 
     MODEL = config_data['GPT']['MODEL']
     API_KEY = api_data['CHAT_GPT']
-    ARTICLE_SIZE_LIMIT = config_data['GPT']['LIMITS']['ARTICLE_DATA_WORD_COUNT']
 
     ROLE_OPTIONS = list(config_data['ROLES'].keys())
     if role_name not in ROLE_OPTIONS and role_name != None:
@@ -70,7 +65,7 @@ def process_chat_gpt(query: str, role_name: str):
     if role_name != None: 
         ROLE_DATA = config_data['GPT']['ROLES'][role_name]
 
-    parameters = generate_request(query, ARTICLE_SIZE_LIMIT, ROLE_DATA)
+    parameters = generate_request(query, ROLE_DATA)
     response = gpt_call(MODEL, API_KEY, parameters)
 
     return response

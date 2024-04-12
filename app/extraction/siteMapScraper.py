@@ -1,6 +1,5 @@
 from app.general.util import website_request, check_for_valid_website
 from app.general.nameScraper import spacey_search
-from app.processing.filterNames import filter_out_names
 
 def url_creator(domain: str, endpoints: list) -> list: 
     

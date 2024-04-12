@@ -15,7 +15,7 @@ def configuration(config: Config) -> Config:
     config.memoize_articles = False
     return config
 
-def article_pull(url: str) -> tuple(str, str, list, list):
+def article_pull(url: str) -> tuple[str, str, list, list]:
 
     article_title: str = None 
     article_text: str = None
@@ -65,6 +65,9 @@ def make_freq_table(text_string) -> dict:
 
 
 def article_summarizer(article_text: str) -> str:
+
+    if article_text == None: 
+        return article_text
 
     tokenized = sent_tokenize(article_text)
     frequency_dict = make_freq_table(article_text)

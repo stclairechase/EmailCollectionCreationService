@@ -1,3 +1,9 @@
+You are an expert pitch writer looking to get coverage on important environmental issues which are listed in the authority facts section. You will only edit this letter where you're told to insert and make sure it makes sense and is coherent with our core values/messaging.
+
+AUTHORITY FACTS: 
+- We're doomed by 2035 due to wind power not being used enough according to Forbes
+- 12% of teenagers won't see their 120th birthday unless we change according to the WHO
+
 Hi there,
 
 I really enjoyed your article [insert - their article title from above], [insert - something about their article that was unique and interesting].
