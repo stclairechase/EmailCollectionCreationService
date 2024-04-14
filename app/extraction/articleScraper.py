@@ -60,9 +60,7 @@ def make_freq_table(text_string) -> dict:
             frequency_table[word] += 1
         else:
             frequency_table[word] = 1
-
     return frequency_table
-
 
 def article_summarizer(article_text: str) -> str:
 
@@ -98,3 +96,32 @@ def article_summarizer(article_text: str) -> str:
             sentence_count += 1
 
     return summary
+
+def article_pull(url: str, summarizer = False) -> tuple[str, str, list, list]:
+
+    article_title: str = None 
+    article_text: str = None
+    article_keywords: list = None
+    article_authors: list = None
+
+    client = Config()
+    config = configuration(client)
+
+    article_data = Article(url, config=config)
+
+    try: 
+        article_data.download()
+        article_data.parse()
+    except ArticleException:
+        pass
+    except Exception as e: 
+        print(e)
+
+    article_title = article_data.title
+    article_text = article_data.text
+    article_keywords = article_data.keywords
+    article_authors = article_data.authors
+
+    if summarizer == True: 
+        article_text = article_summarizer(article_text)
+    return article_title, article_text, article_keywords, article_authors

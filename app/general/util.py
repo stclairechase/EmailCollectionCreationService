@@ -2,8 +2,9 @@ from requests import session, Response
 from bs4 import BeautifulSoup
 from threading import Thread
 from re import findall
+import lxml
 
-def website_request(url: str, valid_url=None) -> tuple[str, BeautifulSoup]:
+def website_request(url: str) -> tuple[str, BeautifulSoup]:
 
     if url == None or type(url) != str: 
         return None, None

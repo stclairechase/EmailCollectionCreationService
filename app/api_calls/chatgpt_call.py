@@ -4,7 +4,15 @@ from time import sleep
 
 from app.data_management.general import data_request
 
-def gpt_call(model: str, api_key: str, parameters: list[dict]):
+def gpt_call(model: str, parameters: list[dict], api_key = None):
+
+    if api_key == None: 
+        api_file_path = 'data/required_data/api_keys.json'
+        api_data = data_request(api_file_path)
+        try:
+            api_key = api_data['CHAT_GPT']
+        except: 
+            raise ValueError('Please add an gpt api-key to the config.json file')
 
     openai.api_key = api_key
 
@@ -28,7 +36,7 @@ def gpt_call(model: str, api_key: str, parameters: list[dict]):
     response = response.choices[0].message.content
     return response
 
-def generate_request(query: str, role_data: str) -> str:
+def generate_request(query: str, role: str) -> str:
 
     request_parameters = []
 
@@ -37,10 +45,18 @@ def generate_request(query: str, role_data: str) -> str:
         "content": query
     }
     request_parameters.append(query_parameters)
-    if role_data != None: 
+    if roles != None: 
+
+        config_file = 'data/required_data/config.json'
+        config_data = data_request(config_file)
+
+        roles: dict = config_data['GPT']['ROLES']
+        if role not in roles.keys():
+            return request_parameters
+        
         role_parameters = {
             "role": "system",
-            "content": role_data
+            "content": roles[role]
         }
         request_parameters.append(role_parameters)
 
