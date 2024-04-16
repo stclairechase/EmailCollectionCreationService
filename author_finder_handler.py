@@ -2,7 +2,7 @@ from pandas import DataFrame
 from threading import Thread, Lock
 from os.path import exists
 
-from .app.extraction.siteMapScraper import process_site_map_search
+from app.extraction.siteMapScraper import process_site_map_search
 from app.extraction.tagScraper import process_tag_scrape
 from app.general.util import website_request, seperate_url
 from app.data_management.general import directory_path_finder, setup_data, data_request
@@ -114,7 +114,7 @@ def test():
 
     return name_data
 
-def main(file_name: str):
+def main(file_name = None):
 
     if file_name == None:
         file_name = 'rp_yes_2.csv'

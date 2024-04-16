@@ -1,6 +1,6 @@
 from pyhunter import PyHunter
 
-from app.general.util import data_request
+from app.data_management.general import data_request
 
 def hunterio_verifier(domain: str, first_name: str, last_name: str):
 

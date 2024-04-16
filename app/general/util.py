@@ -70,3 +70,14 @@ def seperate_url(url: str):
     base_url = (extension_split + extension).replace(front_part_of_url, '')
 
     return base_url, url
+
+def find_contact_url(base_url: str) -> str:
+
+    endpoints = [
+        'contact', 'contacts', 'contact-us', 'info', 'support',
+        'team', 'mail', 'about', 'email'
+    ]
+    possible_urls = [base_url + endpoint for endpoint in endpoints]
+    valid_url: str = check_for_valid_website(possible_urls)
+
+    return valid_url

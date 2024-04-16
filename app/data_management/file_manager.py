@@ -1,4 +1,4 @@
-from pandas import read_csv, DataFrame
+from pandas import read_csv, DataFrame, concat
 from os import path
 
 from app.general.util import seperate_url
@@ -13,7 +13,7 @@ class FileManager:
         
         self.imported_url_list = url_list
 
-    def check_for_scraped_values(self) -> tuple[list]:
+    def check_for_scraped_values(self) -> tuple[list, list[dict]]:
 
         current_data = []
         filtered_url_list = []
@@ -27,6 +27,9 @@ class FileManager:
             base_urls.append(base_url)
         
         raw_dataframe = read_csv(self.file_path)
+        if raw_dataframe.empty: 
+            return []
+        
         url_check_mask = raw_dataframe['base_url'].isin(base_urls)
 
         filtered_df = raw_dataframe[url_check_mask]
@@ -37,15 +40,17 @@ class FileManager:
             base_url, full_url = seperate_url(url)
             if base_url not in current_url_data:
                 filtered_url_list.append(full_url)
-
+        
         return filtered_url_list, current_data
 
     def log_new_data(self, name_data: list):
 
-        temp_dataframe = DataFrame(name_data)
-        temp_dataframe = temp_dataframe.drop_duplicates()
-
         if path.exists(self.file_path):
-            temp_dataframe.to_csv(self.file_path, mode='a', index=False, header=False)
+            current_data: DataFrame = read_csv(self.file_path)
+            temp_dataframe = DataFrame(name_data)
+            new_dataframe: DataFrame = concat([current_data, temp_dataframe]) 
         else: 
-            temp_dataframe.to_csv(self.file_path, mode='w', index=False)
+            new_dataframe = DataFrame(name_data)
+            
+        new_dataframe = new_dataframe.drop_duplicates()
+        new_dataframe.to_csv(self.file_path, mode='w', index=False)
