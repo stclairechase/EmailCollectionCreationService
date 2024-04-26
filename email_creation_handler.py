@@ -7,6 +7,7 @@ from app.processing.promptCreator import subject_matter_prompt, email_body_promp
 from app.general.util import seperate_url
 from app.api_calls.chatgpt_call import gpt_call, generate_request
 from app.data_management.emailList import pull_emails
+from app.data_management.emailLocater import locate_email_data
 
 
 def check_last_data(base_url: str, url: str, email_data: list):
@@ -39,13 +40,34 @@ def process_script(url: str, extra_detail: list, email_data: list, model: str, s
     exisiting_data = check_last_data(base_url, url, email_data)
     if exisiting_data == True: 
         return
+    
+    return_data = {
+        "url": url, 
+        "base_url": base_url,
+        "article_title": None,
+        "article_text": None, 
+        "article_keywords": None,
+        "article_authors": None,
+        "subject_line": None,
+        "email_body": None,
+        "email": None
+    }
 
     article_title, article_text, article_keywords, article_authors = article_pull(url, summarize_article)
 
     hierarchy = [
         article_text, article_title, article_keywords, url].extend(list(extra_detail))
+    
     query_data = prompt_detail_decider(hierarchy)
-
+    email = locate_email_data(base_url)
+    if email == None: 
+        return_data['article_title'] = article_title
+        return_data['article_text'] = article_text
+        return_data['article_keywords'] = article_keywords
+        return_data['article_authors'] = article_authors
+        return return_data
+    
+    return_data['email'] = email
 
     return
 
@@ -57,14 +79,15 @@ def main(file_name=None):
     json_data = data_request(json_file_path)
     url_column: str = json_data['DATA_PROCESSING']['IMPORTS_URL_COLUMN']
     additions: list = json_data['EMAIL_GENERATION_DETAILS']["ADDITIONAL_IMPORTED_COLUMNS"]
+    model: str = json_data['GPT']['MODEL']
 
     if file_name == None: 
         file_name = "rp_yes_2.csv"
     imported_data: list[dict] = setup_data(file_name, asdict=True)
 
-    base_urls = [data['base_url'] for data in imported_data]
+    urls = [x[url_column] for x in imported_data]
     inner_file = "data/created_data/raw_article_scrape.csv"
-    file_manager = FileManager(base_urls, inner_file)
+    file_manager = FileManager(urls, inner_file)
 
     base_urls, email_data = file_manager.check_for_scraped_values()
 

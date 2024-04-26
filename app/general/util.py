@@ -4,7 +4,7 @@ from threading import Thread
 from re import findall
 import lxml
 
-def website_request(url: str) -> tuple[str, BeautifulSoup]:
+def website_request(url: str, **kwargs) -> tuple[str, BeautifulSoup]:
 
     if url == None or type(url) != str: 
         return None, None
@@ -16,7 +16,7 @@ def website_request(url: str) -> tuple[str, BeautifulSoup]:
     if 'http' not in url: 
         url = 'https://' + url
     try:
-        raw: Response = session_.get(url, headers=headers)
+        raw: Response = session_.get(url, headers=headers, **kwargs)
         status: int = raw.status_code
         VALID_STATUS_CODE = 200
         if status != VALID_STATUS_CODE: 

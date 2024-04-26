@@ -6,7 +6,7 @@ from app.extraction.siteMapScraper import process_site_map_search
 from app.extraction.tagScraper import process_tag_scrape
 from app.general.util import website_request, seperate_url
 from app.data_management.general import directory_path_finder, setup_data, data_request
-from app.general.nameScraper import spacey_search
+from app.general.nameParser import spacey_search
 from app.api_calls.hunterio_verifier import hunterio_verifier
 from app.data_management.file_manager import FileManager
 
@@ -28,7 +28,7 @@ def last_file_check(name_data: list) -> list:
 
     return filtered_names
 
-def process_author_name_script(url: str, name_data: list) -> None: 
+def process_author_name_script(url: str, name_data: list, log_function) -> None: 
 
     base_url, url = seperate_url(url)
         
@@ -45,6 +45,7 @@ def process_author_name_script(url: str, name_data: list) -> None:
         name_data_addition['author_name'] = tag_name_check
         with thread_lock:
             name_data.append(name_data_addition)
+            log_function(name_data_addition)
         return name_data
     
     site_map_check: list = process_site_map_search(base_url)
@@ -56,6 +57,7 @@ def process_author_name_script(url: str, name_data: list) -> None:
             temp_data.append(inner_data)
         with thread_lock:
             name_data.extend(temp_data)
+            log_function(name_data_addition)
         return name_data
         
     article_check: list = spacey_search(raw_text)
@@ -68,6 +70,7 @@ def process_author_name_script(url: str, name_data: list) -> None:
             temp_data.append(inner_data)
         with thread_lock:
             name_data.extend(temp_data)
+            log_function(temp_data)
         return name_data
     
 def process_hunter_io(name_data: list[dict]):
@@ -101,23 +104,13 @@ def process_hunter_io(name_data: list[dict]):
 
             if exists(file_path):
                 temp_df.to_csv(file_path, mode='a', index=False, header=False)
-
             else: 
                 temp_df.to_csv(file_path, mode='w', index=False)
-    
-def test():
-
-    name_data = []
-    urls = setup_data()
-    for url in urls: 
-        process_author_name_script(url, name_data)
-
-    return name_data
-
+                
 def main(file_name = None):
 
     if file_name == None:
-        file_name = 'rp_yes_2.csv'
+        file_name = '/Users/chasestclaire/Desktop/coding_projects/github/AutomatedEmailCreation/EmailCollectionCreationService/data/input_data/testing_feb_20.csv'
 
     urls = setup_data(file_name)
     inner_file = "data/created_data/raw_name_scrape.csv"
@@ -129,13 +122,12 @@ def main(file_name = None):
     if urls != []:
         threads = []
         for url in urls: 
-            thread = Thread(target=process_author_name_script, args=(url, name_data,))
+            thread = Thread(target=process_author_name_script, args=(url, name_data, file_manager.log_new_data, ))
             thread.start()
             threads.append(thread)
         for thread in threads:
             thread.join()
 
-    file_manager.log_new_data(name_data)
     process_hunter_io(name_data)
 
 if __name__ == "__main__":

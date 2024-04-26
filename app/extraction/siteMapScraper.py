@@ -1,5 +1,6 @@
 from app.general.util import website_request, check_for_valid_website
-from app.general.nameScraper import spacey_search
+from app.general.nameParser import spacey_search
+from app.processing.filterNames import filter_out_names
 
 def url_creator(domain: str, endpoints: list) -> list: 
     
@@ -47,7 +48,7 @@ def process_site_map_search(base_url: str):
     
     raw_text, soup = website_request(valid_team_map)
     valid_names = spacey_search(raw_text)
-    #valid_names = filter_out_names(possible_names)
+    valid_names = filter_out_names(valid_names)
     
     if valid_names == []:
         return None

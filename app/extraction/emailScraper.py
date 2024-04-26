@@ -135,7 +135,7 @@ def check_historical_data(base_url: str, email_list: list[dict]) -> bool:
     
     return False
 
-def process(url: str, email_list: list) -> list[dict]: 
+def process_scrapers(url: str, email_list: list) -> list[dict]: 
 
     possible_emails = []
 

@@ -1,4 +1,5 @@
 {
     "HUNTER_IO": "insert api key",
-    "CHAT_GPT": "insert api key"
+    "CHAT_GPT": "insert api key",
+    "MAIL_GUN": "pubkey-7fcddf0cb4feef33efc375becaa43b3a"
 }

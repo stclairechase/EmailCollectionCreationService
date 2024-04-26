@@ -14,7 +14,7 @@ def directory_path_finder() -> str:
 
     return directory_path
 
-def data_request(inner_file_name) -> dict or DataFrame:
+def data_request(inner_file_name) -> dict | DataFrame:
 
     directory_path = directory_path_finder()
     data_file_path = directory_path + inner_file_name
