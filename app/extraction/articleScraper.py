@@ -117,10 +117,12 @@ def article_pull(url: str, summarizer = False) -> tuple[str, str, list, list]:
     except Exception as e: 
         print(e)
 
-    article_title = article_data.title
-    article_text = article_data.text
-    article_keywords = article_data.keywords
-    article_authors = article_data.authors
+    set_to_none = lambda x : None if x in ['',[]] else x
+
+    article_title = set_to_none(article_data.title)
+    article_text = set_to_none(article_data.text)
+    article_keywords = set_to_none(article_data.keywords)
+    article_authors = set_to_none(article_data.authors)
 
     if summarizer == True: 
         article_text = article_summarizer(article_text)

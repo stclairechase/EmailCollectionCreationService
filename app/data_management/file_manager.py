@@ -26,9 +26,12 @@ class FileManager:
             base_url, full_url = seperate_url(url)
             base_urls.append(base_url)
         
-        raw_dataframe = read_csv(self.file_path)
-        if raw_dataframe.empty: 
-            return []
+        try:
+            raw_dataframe = read_csv(self.file_path)
+            if raw_dataframe.empty: 
+                return [], []
+        except: 
+            return [], []
         
         url_check_mask = raw_dataframe['base_url'].isin(base_urls)
 
@@ -46,11 +49,17 @@ class FileManager:
     def log_new_data(self, name_data: list):
 
         if path.exists(self.file_path):
-            current_data: DataFrame = read_csv(self.file_path)
-            temp_dataframe = DataFrame(name_data)
-            new_dataframe: DataFrame = concat([current_data, temp_dataframe]) 
+            try:
+                current_data: DataFrame = read_csv(self.file_path)
+                temp_dataframe = DataFrame(name_data)
+                new_dataframe: DataFrame = concat([current_data, temp_dataframe]) 
+            except: 
+                new_dataframe = DataFrame(name_data)
         else: 
             new_dataframe = DataFrame(name_data)
-            
-        new_dataframe = new_dataframe.drop_duplicates()
+
+        try:
+            new_dataframe = new_dataframe.drop_duplicates()
+        except: 
+            pass
         new_dataframe.to_csv(self.file_path, mode='w', index=False)

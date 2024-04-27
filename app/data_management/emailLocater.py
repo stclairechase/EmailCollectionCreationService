@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from general import data_request
+from .general import data_request
 
 def search_mail_gun_data(base_url: str) -> str: 
 

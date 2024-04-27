@@ -27,6 +27,9 @@ def verify_email(email: str):
     return False
 
 def process_verification(email_data: list) -> list: 
+    
+    if email_data == []: 
+        return email_data
 
     temp_dataframe = DataFrame(email_data)
     temp_dataframe['mail_gun_verification'] = temp_dataframe['email'].apply(verify_email)

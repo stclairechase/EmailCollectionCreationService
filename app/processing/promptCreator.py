@@ -13,22 +13,22 @@ def length_check(article_text: str, limit: int) -> str:
 
 def subject_matter_prompt(details: str) -> str:
 
-    prompt_file_path = 'data/required_data/gpt_prompts/comparision_prompt.txt'
+    prompt_file_path = 'data/required_data/gpt_prompts/subject_prompt.txt'
 
     main_prompt: str = data_request(prompt_file_path)
-    prompt = f"{details}\n\n{main_prompt}"
+    prompt = f"{main_prompt}\n\n{details}"
 
     return prompt
 
 def email_body_prompt(details: str) -> str:
 
     config_file = "data/required_data/config.json"
-    emaiL_example_file = "data/required_data/gpt_prompts/email_example.txt"
+    emaiL_example_file = "data/required_data/gpt_prompts/email_generation_prompt.txt"
 
     configs = data_request(config_file)
     email_prompt = data_request(emaiL_example_file)
 
-    limits: int = configs['GPT']['ARTICLE_DATA_WORD_COUNT']
+    limits: int = configs['GPT']['LIMITS']['ARTICLE_DATA_WORD_COUNT']
     sign_off_name: str = configs['EMAIL_GENERATION_DETAILS']['SIGN_OFF_NAME']
 
     details = length_check(details, limits)

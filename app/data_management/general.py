@@ -27,8 +27,17 @@ def data_request(inner_file_name) -> dict | DataFrame:
             return load(json_)
     if 'csv' in data_file_path: 
         return read_csv(data_file_path)
+    if 'txt' in data_file_path:
+        with open(data_file_path) as f: 
+            data = f.read()
+        return data
 
 def setup_data(file_name: str, asdict=False) -> list:
+
+    json_file_path = 'data/required_data/config.json'
+    json_data = data_request(json_file_path)
+
+    url_column: str = json_data['DATA_PROCESSING']['IMPORTS_URL_COLUMN']
 
     file_delimitter = '/'
     if file_delimitter in file_name:
@@ -37,20 +46,10 @@ def setup_data(file_name: str, asdict=False) -> list:
 
     inner_folder_path = 'data/input_data/'
     imported_data: DataFrame = data_request(inner_folder_path + file_name)
+    imported_data = imported_data[(imported_data[url_column].isin([None, [], '']) == False) & (isna(imported_data[url_column]) == False)] 
 
     if asdict == True: 
         return imported_data.to_dict(orient='records')
 
-    json_file_path = 'data/required_data/config.json'
-    json_data = data_request(json_file_path)
-
-    url_column: str = json_data['DATA_PROCESSING']['IMPORTS_URL_COLUMN']
-
     url_list = imported_data[url_column].tolist()
-
-    filtered_list = []
-    for url in url_list:
-        if not isna(url):
-            filtered_list.append(url)
-
-    return filtered_list
+    return url_list

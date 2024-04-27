@@ -45,7 +45,7 @@ def generate_request(query: str, role: str) -> str:
         "content": query
     }
     request_parameters.append(query_parameters)
-    if roles != None: 
+    if role != None: 
 
         config_file = 'data/required_data/config.json'
         config_data = data_request(config_file)
@@ -62,7 +62,7 @@ def generate_request(query: str, role: str) -> str:
 
     return request_parameters
 
-def process_chat_gpt(query: str, role_name: str):
+def process_chat_gpt(query: str, role_name = None) -> str:
 
     config_inner_file_path = 'data/required_data/config.json'
     api_inner_file_path = 'data/required_data/api_keys.json'
@@ -73,7 +73,7 @@ def process_chat_gpt(query: str, role_name: str):
     MODEL = config_data['GPT']['MODEL']
     API_KEY = api_data['CHAT_GPT']
 
-    ROLE_OPTIONS = list(config_data['ROLES'].keys())
+    ROLE_OPTIONS = list(config_data['GPT']['ROLES'].keys())
     if role_name not in ROLE_OPTIONS and role_name != None:
         raise ValueError('Please select one of these role names: %s' % ROLE_OPTIONS)
     

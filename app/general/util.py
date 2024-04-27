@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from threading import Thread
 from re import findall
 import lxml
+from pandas import isna
 
 def website_request(url: str, **kwargs) -> tuple[str, BeautifulSoup]:
 
@@ -59,7 +60,10 @@ def check_for_valid_website(url_list: list[str]) -> tuple[str, BeautifulSoup]:
     return valid_url[0]
 
 def seperate_url(url: str): 
-    """splits_article"""
+    """splits url"""
+
+    if url == None or type(url) != str: 
+        return None, None
 
     front_part_of_url = 'http://www.'
     
